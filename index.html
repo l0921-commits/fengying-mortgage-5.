@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0044)https://fengying-mortgage-5-cppy.vercel.app/ -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>青安 3.0 資格試算與房貸負擔全方位評估系統</title>
     <style>
@@ -337,6 +337,23 @@
             .comparison-control-box { flex-direction: column; align-items: stretch; }
             .comparison-input-group { justify-content: space-between; }
         }
+
+        /* 手機相容的頁面內資格警示視窗 */
+        .validation-modal-backdrop {
+            position: fixed; inset: 0; z-index: 99999; display: none;
+            align-items: center; justify-content: center; padding: 20px;
+            background: rgba(15, 23, 42, .62);
+        }
+        .validation-modal-backdrop.is-visible { display: flex; }
+        .validation-modal { width: min(100%, 420px); background: #fff; border-radius: 16px;
+            padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.28); text-align: center; }
+        .validation-modal h2 { margin: 0 0 12px; color: #dc2626; font-size: 1.25rem; }
+        .validation-modal p { margin: 0 0 20px; color: #334155; line-height: 1.7; }
+        .validation-modal button { width: 100%; min-height: 46px; border: 0; border-radius: 10px;
+            background: #dc2626; color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .validation-live { margin-top: 8px; padding: 10px 12px; border-radius: 8px;
+            color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; font-weight: 700; display: none; }
+        .validation-live.is-visible { display: block; }
     </style>
 </head>
 <body>
@@ -344,7 +361,7 @@
 <div class="container">
     <div class="header">
         <span class="badge">✦ 2026 青安 3.0 最新標準</span>
-        <h1>蔣俊彥地政士X有巢氏*豐迎不動產-房貸試算系統</h1>
+        <h1>蔣俊彥地政士X元鼎地產-房貸試算系統</h1>
         <p>請輸入您的核貸條件，系統將實時核算資格並生成還款試算表</p>
     </div>
 
@@ -352,20 +369,20 @@
         <div class="form-grid">
             <div class="form-group" id="grp_age">
                 <label for="age">1. 申貸款人年齡（歲）</label>
-                <input type="number" id="age" min="18" max="100" value="32" oninput="evaluateAndCalculate()" required>
-                <div class="hint" id="hint_age">規定未滿 50 歲，且「年齡 ＋ 貸款年限 ≤ 80」</div>
+                <input type="number" id="age" min="18" max="100" value="32"  required="">
+                <div class="hint" id="hint_age">規定未滿 50 歲，且「年齡 ＋ 貸款年限 ≤ 80」</div><div id="live_age" class="validation-live" aria-live="assertive"></div>
             </div>
 
             <div class="form-group" id="grp_income">
                 <label for="income">2. 個人綜合所得年額（萬元）</label>
-                <input type="number" id="income" min="0" value="120" oninput="evaluateAndCalculate()" required>
-                <div class="hint" id="hint_income">排富條款：個人年所得需在 200 萬元以下</div>
+                <input type="number" id="income" min="0" value="120"  required="">
+                <div class="hint" id="hint_income">排富條款：個人年所得需在 200 萬元以下</div><div id="live_income" class="validation-live" aria-live="assertive"></div>
             </div>
 
             <div class="form-group full-width" id="grp_property">
                 <label>3. 戶籍與名下房產狀況</label>
                 <div class="radio-options">
-                    <label class="radio-btn"><input type="radio" name="property" value="none" checked onchange="evaluateAndCalculate()"> 本人、配偶及子女名下均無房</label>
+                    <label class="radio-btn"><input type="radio" name="property" value="none" checked="" onchange="evaluateAndCalculate()"> 本人、配偶及子女名下均無房</label>
                     <label class="radio-btn"><input type="radio" name="property" value="has" onchange="evaluateAndCalculate()"> 名下已有房屋</label>
                 </div>
                 <div class="hint" id="hint_property">需完全無自有住宅</div>
@@ -374,7 +391,7 @@
             <div class="form-group full-width" id="grp_usedBefore">
                 <label>4. 是否曾使用過青安貸款？</label>
                 <div class="radio-options">
-                    <label class="radio-btn"><input type="radio" name="usedBefore" value="no" checked onchange="evaluateAndCalculate()"> 否（未曾使用）</label>
+                    <label class="radio-btn"><input type="radio" name="usedBefore" value="no" checked="" onchange="evaluateAndCalculate()"> 否（未曾使用）</label>
                     <label class="radio-btn"><input type="radio" name="usedBefore" value="yes" onchange="evaluateAndCalculate()"> 是（一生限貸一次）</label>
                 </div>
                 <div class="hint" id="hint_usedBefore">青安 3.0 每人一生限用一次</div>
@@ -385,21 +402,21 @@
                 <select id="location" onchange="evaluateAndCalculate()">
                     <option value="taipei">臺北市（總價上限 3,500 萬）</option>
                     <option value="newtaipei_hsinchu">新北市、新竹縣市（總價上限 2,500 萬）</option>
-                    <option value="others" selected>其他縣市（含台中、台南、高雄等，總價上限 2,000 萬）</option>
+                    <option value="others" selected="">其他縣市（含台中、台南、高雄等，總價上限 2,000 萬）</option>
                 </select>
                 <div class="hint" id="hint_location">依區域限制鑑價與成交總價</div>
             </div>
 
             <div class="form-group" id="grp_housePrice">
                 <label for="housePrice">6. 房屋成交或鑑價總價（萬元）</label>
-                <input type="number" id="housePrice" min="0" value="1600" oninput="evaluateAndCalculate()" required>
-                <div class="hint" id="hint_housePrice">不可高於該區域總價上限</div>
+                <input type="number" id="housePrice" min="0" value="1600" oninput="evaluateAndCalculate()" required="">
+                <div class="hint" id="hint_housePrice">該區域總價上限為 2000 萬元</div>
             </div>
 
             <div class="form-group full-width" id="grp_familyStatus">
                 <label>7. 家庭條件與特殊身分（最高核貸額度上限）</label>
                 <div class="radio-options">
-                    <label class="radio-btn"><input type="radio" name="familyStatus" value="normal" checked onchange="evaluateAndCalculate()"> 一般首購族（上限 1,000 萬）</label>
+                    <label class="radio-btn"><input type="radio" name="familyStatus" value="normal" checked="" onchange="evaluateAndCalculate()"> 一般首購族（上限 1,000 萬）</label>
                     <label class="radio-btn"><input type="radio" name="familyStatus" value="newlywed" onchange="evaluateAndCalculate()"> 💍 新婚家庭：結婚 2 年內（上限 1,200 萬）</label>
                     <label class="radio-btn"><input type="radio" name="familyStatus" value="children" onchange="evaluateAndCalculate()"> 👶 育有未成年子女家庭（上限 1,500 萬）</label>
                 </div>
@@ -408,24 +425,24 @@
 
             <div class="form-group" id="grp_loanAmount">
                 <label for="loanAmount">8. 欲申請青安貸款金額（萬元）</label>
-                <input type="number" id="loanAmount" min="0" value="1000" oninput="evaluateAndCalculate()" required>
-                <div class="hint" id="hint_loanAmount">最高可貸 8 成，且不超過身分上限</div>
+                <input type="number" id="loanAmount" min="0" value="1000" oninput="evaluateAndCalculate()" required="">
+                <div class="hint" id="hint_loanAmount">✓ 符合：目前身分（一般身分）額度上限為 1000 萬（8成上限 1280 萬）</div>
             </div>
 
             <div class="form-group" id="grp_loanTerm">
                 <label for="loanTerm">9. 預計貸款年限（年）</label>
                 <select id="loanTerm" onchange="evaluateAndCalculate()">
-                    <option value="40" selected>40 年</option>
+                    <option value="40" selected="">40 年</option>
                     <option value="30">30 年</option>
                     <option value="20">20 年</option>
                 </select>
-                <div class="hint" id="hint_loanTerm">年齡 + 年限需 ≤ 80</div>
+                <div class="hint" id="hint_loanTerm">依年齡計算最長可貸 40 年</div>
             </div>
 
             <div class="form-group full-width" id="grp_gracePeriod">
                 <label for="gracePeriod">10. 申請寬限期（年）</label>
                 <select id="gracePeriod" onchange="evaluateAndCalculate()">
-                    <option value="5" selected>5 年（只繳利息）</option>
+                    <option value="5" selected="">5 年（只繳利息）</option>
                     <option value="3">3 年</option>
                     <option value="0">0 年（不使用寬限期）</option>
                 </select>
@@ -434,29 +451,29 @@
         </div>
     </form>
 
-    <div id="resultContainer">
-        <div id="statusCard" class="result-status-card">
-            <div id="statusTitle" class="status-title"></div>
+    <div id="resultContainer" style="display: block;">
+        <div id="statusCard" class="result-status-card status-pass">
+            <div id="statusTitle" class="status-title">✓ 符合青安 3.0 申辦資格</div>
             <ul id="statusReasons" style="margin: 8px 0 0 0; padding-left: 20px;"></ul>
         </div>
 
-        <div id="calculationSection">
+        <div id="calculationSection" style="display: block;">
             <div class="section-title">📊 貸款方案與分段還款摘要</div>
             
             <div class="summary-cards">
                 <div class="card">
                     <div class="card-label">最終核算青安額度</div>
-                    <div class="card-value" id="finalLoanVal">0 萬</div>
-                    <div class="card-subtext" id="loanCapNote">受限於上限規定</div>
+                    <div class="card-value" id="finalLoanVal">1000 萬</div>
+                    <div class="card-subtext" id="loanCapNote">一般身分上限 1000 萬</div>
                 </div>
                 <div class="card">
                     <div class="card-label">最長可貸年限</div>
-                    <div class="card-value" id="finalTermVal">0 年</div>
-                    <div class="card-subtext" id="termNote">年齡+年限 ≤ 80</div>
+                    <div class="card-value" id="finalTermVal">40 年</div>
+                    <div class="card-subtext" id="termNote">滿足年限要求</div>
                 </div>
                 <div class="card">
                     <div class="card-label">寬限期月繳（只繳息）</div>
-                    <div class="card-value" id="graceMonthlyVal">$0</div>
+                    <div class="card-value" id="graceMonthlyVal">$14,792</div>
                     <div class="card-subtext">前 3 年補貼階段</div>
                 </div>
             </div>
@@ -476,20 +493,20 @@
                         <tr>
                             <td><strong>第 1 ~ 3 年</strong><br><small style="color:var(--text-muted)">(1-36 個月)</small></td>
                             <td><span style="color: var(--success); font-weight: 700;">1.775%</span><br><small style="color:var(--text-muted)">(享有完整 2 碼補貼)</small></td>
-                            <td id="p1Grace">$0</td>
-                            <td id="p1Monthly" style="font-weight: 700; color: var(--primary);">$0</td>
+                            <td id="p1Grace">$14,792</td>
+                            <td id="p1Monthly" style="font-weight: 700; color: var(--primary);">仍在寬限期</td>
                         </tr>
                         <tr>
                             <td><strong>第 4 年</strong><br><small style="color:var(--text-muted)">(37-48 個月)</small></td>
                             <td><strong>1.900%</strong><br><small style="color:var(--text-muted)">(補貼減少半碼)</small></td>
-                            <td id="p2Grace">$0</td>
-                            <td id="p2Monthly" style="font-weight: 700; color: var(--primary);">$0</td>
+                            <td id="p2Grace">$15,833</td>
+                            <td id="p2Monthly" style="font-weight: 700; color: var(--primary);">仍在寬限期</td>
                         </tr>
                         <tr>
                             <td><strong>第 5 年起</strong><br><small style="color:var(--text-muted)">(49 個月後)</small></td>
                             <td><strong>2.025%</strong><br><small style="color:var(--text-muted)">(回歸一般優惠利率)</small></td>
-                            <td id="p3Grace">$0</td>
-                            <td id="p3Monthly" style="font-weight: 700; color: var(--primary);">$0</td>
+                            <td id="p3Grace">$16,875</td>
+                            <td id="p3Monthly" style="font-weight: 700; color: var(--primary);">$33,255</td>
                         </tr>
                     </tbody>
                 </table>
@@ -508,11 +525,29 @@
                 </div>
             </div>
 
-            <div class="highlight-savings" id="savingsBox"></div>
+            <div class="highlight-savings" id="savingsBox" style="border-color: var(--success); background-color: var(--success-bg);">
+        <div style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 700;">
+            ✦ 相較於一般商業房貸（2.185%）：
+        </div>
+        <div style="font-size: 1rem; margin-bottom: 4px;">
+            前 3 年補貼期預估可節省利息：<strong style="font-size: 1.25rem; color: var(--success);">$123,000</strong> 元
+        </div>
+        <div style="font-size: 0.9rem; color: #475569;">
+            全期 40 年累計省下總利息約：<strong>$515,563</strong> 元 
+        </div>
+    </div>
         </div>
     </div>
 </div>
 
+
+<div id="validationModal" class="validation-modal-backdrop" role="alertdialog" aria-modal="true" aria-labelledby="validationModalTitle" aria-describedby="validationModalMessage">
+  <div class="validation-modal">
+    <h2 id="validationModalTitle">資格不符提醒</h2>
+    <p id="validationModalMessage"></p>
+    <button type="button" id="validationModalClose">我知道了</button>
+  </div>
+</div>
 <script>
 function setFieldStatus(grpId, hintId, isPass, normalMsg, failMsg) {
     const grp = document.getElementById(grpId);
@@ -735,8 +770,68 @@ function evaluateAndCalculate() {
     `;
 }
 
+
+// 使用頁面內自訂警示，不依賴手機瀏覽器是否允許 window.alert。
+(function installMobileValidation() {
+    const modal = document.getElementById('validationModal');
+    const modalMessage = document.getElementById('validationModalMessage');
+    const closeButton = document.getElementById('validationModalClose');
+    const lastShown = { age: '', income: '' };
+
+    function closeModal() { modal.classList.remove('is-visible'); }
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (event) { if (event.target === modal) closeModal(); });
+
+    function checkField(id, showPopup) {
+        const input = document.getElementById(id);
+        const live = document.getElementById('live_' + id);
+        const raw = input.value.trim();
+        const value = raw === '' ? NaN : Number(raw);
+        let message = '';
+        if (id === 'age') {
+            if (raw === '') message = '請輸入申貸人年齡。';
+            else if (!Number.isFinite(value) || value < 18) message = '申貸人年齡需為 18 歲以上。';
+            else if (value >= 50) message = '申貸人年齡需未滿 50 歲！目前輸入 ' + value + ' 歲，不符合申辦條件。';
+        } else {
+            if (raw === '') message = '請輸入個人綜合所得年額。';
+            else if (!Number.isFinite(value) || value < 0) message = '所得金額不可為負數。';
+            else if (value > 200) message = '個人年收入超過 200 萬元排富門檻！目前輸入 ' + value + ' 萬元，不符合申辦條件。';
+        }
+        if (message) {
+            live.textContent = '⚠ ' + message;
+            live.classList.add('is-visible');
+            if (showPopup && lastShown[id] !== raw) {
+                lastShown[id] = raw;
+                modalMessage.textContent = message;
+                modal.classList.add('is-visible');
+            }
+        } else {
+            live.textContent = '';
+            live.classList.remove('is-visible');
+            lastShown[id] = '';
+        }
+    }
+
+    ['age', 'income'].forEach(function (id) {
+        const input = document.getElementById(id);
+        input.addEventListener('input', function () {
+            evaluateAndCalculate();
+            checkField(id, true);
+        });
+        input.addEventListener('change', function () {
+            evaluateAndCalculate();
+            checkField(id, true);
+        });
+        input.addEventListener('blur', function () {
+            evaluateAndCalculate();
+            checkField(id, true);
+        });
+    });
+})();
+
 window.onload = evaluateAndCalculate;
 </script>
 
-</body>
-</html>
+
+
+</body></html>
